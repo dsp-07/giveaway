@@ -3,19 +3,24 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
-// RENDER REQUIREMENT: Use process.env.PORT
 const PORT = process.env.PORT || 3000;
+const DATA_FILE = 'participants.json';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public'));
 
-const DATA_FILE = 'participants.json';
+// Look for files in the root folder instead of 'public'
+app.use(express.static(__dirname));
 
 // Ensure the JSON file exists
 if (!fs.existsSync(DATA_FILE)) {
     fs.writeFileSync(DATA_FILE, JSON.stringify([]));
 }
+
+// Serve the index.html file when someone visits the main URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Route to handle registration
 app.post('/register', (req, res) => {
@@ -37,5 +42,4 @@ app.get('/pick-winner', (req, res) => {
     res.json({ winner });
 });
 
-// Listen on the dynamic PORT
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
