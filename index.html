@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Giveaway</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Fluid Entrance Animation */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            width: 380px;
+            text-align: center;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        h2 { color: #1f2937; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        p { color: #4b5563; margin-bottom: 2rem; }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        button.submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        button.submit-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        button.submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Winner Reveal Styling */
+        #winnerDisplay {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #ecfdf5;
+            color: #065f46;
+            display: none;
+            border: 1px solid #a7f3d0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+
+        .admin-section {
+            margin-top: 30px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 20px;
+        }
+
+        .admin-btn {
+            background: none;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <h2>🎁 Mystery Box</h2>
+        <p>Drop your details for a chance to win.</p>
+        
+        <form action="/register" method="POST">
+            <div class="input-group">
+                <input type="text" name="name" placeholder="Full Name" required>
+            </div>
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <button type="submit" class="submit-btn">Enter Giveaway</button>
+        </form>
+
+        <div class="admin-section">
+            <button class="admin-btn" onclick="pickWinner()">Host Tools: Pick Winner</button>
+            <div id="winnerDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        async function pickWinner() {
+            const res = await fetch('/pick-winner');
+            const data = await res.json();
+            const display = document.getElementById('winnerDisplay');
+            
+            if(data.winner) {
+                display.style.display = 'block';
+                display.innerHTML = `🎉 <strong>Winner:</strong> ${data.winner.name}`;
+            } else {
+                alert("No participants found!");
+            }
+        }
+    </script>
+</body>
+</html>
