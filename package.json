@@ -1,7 +1,6 @@
 {
   "name": "giveaway-app",
   "version": "1.0.0",
-  "description": "Simple giveaway website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
