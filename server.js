@@ -2,7 +2,9 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const PORT = 3000;
+
+// RENDER REQUIREMENT: Use process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -29,10 +31,11 @@ app.post('/register', (req, res) => {
 // Route to pick a winner
 app.get('/pick-winner', (req, res) => {
     const participants = JSON.parse(fs.readFileSync(DATA_FILE));
-    if (participants.length === 0) return res.send("No participants yet!");
+    if (participants.length === 0) return res.json({ error: "No participants yet!" });
     
     const winner = participants[Math.floor(Math.random() * participants.length)];
     res.json({ winner });
 });
 
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+// Listen on the dynamic PORT
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
