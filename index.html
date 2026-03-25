@@ -3,161 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Giveaway</title>
+    <title>Infinity Giveaway</title>
     <style>
         :root {
-            --primary: #6366f1;
-            --glass: rgba(255, 255, 255, 0.8);
+            --accent: #00f2ff;
+            --bg: #0a0a0c;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a1a2e 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #16213e 0%, transparent 40%);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            color: white;
             overflow: hidden;
         }
 
-        /* Fluid Entrance Animation */
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        /* Floating background elements */
+        .orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: -1;
+            animation: move 20s infinite alternate;
         }
 
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 2.5rem;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            width: 380px;
+        @keyframes move {
+            from { transform: translate(-20%, -20%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 50px;
+            width: 400px;
             text-align: center;
-            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: float 6s ease-in-out infinite;
         }
 
-        h2 { color: #1f2937; margin-bottom: 0.5rem; font-size: 1.8rem; }
-        p { color: #4b5563; margin-bottom: 2rem; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
 
-        .input-group {
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p { color: #888; margin-bottom: 30px; font-weight: 300; }
+
+        .input-wrapper {
             position: relative;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
         }
 
         input {
             width: 100%;
-            padding: 14px;
-            border: 2px solid transparent;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            border-radius: 15px;
+            color: white;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
             outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
         }
 
         input:focus {
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
         }
 
-        button.submit-btn {
+        button {
             width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: white;
+            padding: 16px;
+            background: var(--accent);
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 15px;
+            color: #000;
+            font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.4s;
+            margin-top: 10px;
         }
 
-        button.submit-btn:hover {
-            background: #4f46e5;
-            transform: translateY(-2px);
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px var(--accent);
+            filter: brightness(1.1);
         }
 
-        button.submit-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Winner Reveal Styling */
-        #winnerDisplay {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 12px;
-            background: #ecfdf5;
-            color: #065f46;
-            display: none;
-            border: 1px solid #a7f3d0;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; } to { opacity: 1; }
-        }
-
-        .admin-section {
+        .admin-link {
+            display: block;
             margin-top: 30px;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            padding-top: 20px;
+            color: #444;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.3s;
         }
 
-        .admin-btn {
-            background: none;
-            border: 1px solid #d1d5db;
-            color: #6b7280;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
+        .admin-link:hover { color: var(--accent); }
     </style>
 </head>
 <body>
-
-    <div class="glass-card">
-        <h2>🎁 Mystery Box</h2>
-        <p>Drop your details for a chance to win.</p>
+    <div class="orb"></div>
+    
+    <div class="glass-container">
+        <h1>ENTRY PORTAL</h1>
+        <p>Phase 01: Connect to Win</p>
         
         <form action="/register" method="POST">
-            <div class="input-group">
-                <input type="text" name="name" placeholder="Full Name" required>
+            <div class="input-wrapper">
+                <input type="text" name="name" placeholder="IDENTIFIER (NAME)" required>
             </div>
-            <div class="input-group">
-                <input type="email" name="email" placeholder="Email Address" required>
+            <div class="input-wrapper">
+                <input type="email" name="email" placeholder="COMMS (EMAIL)" required>
             </div>
-            <button type="submit" class="submit-btn">Enter Giveaway</button>
+            <button type="submit">Initialize Entry</button>
         </form>
 
-        <div class="admin-section">
-            <button class="admin-btn" onclick="pickWinner()">Host Tools: Pick Winner</button>
-            <div id="winnerDisplay"></div>
-        </div>
+        <a href="/admin-dashboard" class="admin-link">AUTHORIZED PERSONNEL ONLY</a>
     </div>
-
-    <script>
-        async function pickWinner() {
-            const res = await fetch('/pick-winner');
-            const data = await res.json();
-            const display = document.getElementById('winnerDisplay');
-            
-            if(data.winner) {
-                display.style.display = 'block';
-                display.innerHTML = `🎉 <strong>Winner:</strong> ${data.winner.name}`;
-            } else {
-                alert("No participants found!");
-            }
-        }
-    </script>
 </body>
 </html>
